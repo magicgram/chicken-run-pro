@@ -42,6 +42,15 @@
             from { background-position: 0 0, 150px 50px; }
             to { background-position: -500px 0, -425px 50px; }
         }
+        
+        @keyframes text-glow {
+            0%, 100% {
+                text-shadow: 0 0 4px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.5), 0 0 12px rgba(241, 196, 15, 0.8);
+            }
+            50% {
+                text-shadow: 0 0 8px rgba(255, 255, 255, 1), 0 0 16px rgba(255, 255, 255, 0.8), 0 0 24px rgba(243, 156, 18, 1);
+            }
+        }
 
         /* --- NEW GAME THEME STYLES --- */
         :root {
@@ -104,6 +113,13 @@
             width: 100%;
             max-width: 500px; /* A bit wider for better layout */
             color: var(--text-on-wood);
+        }
+
+        .app-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            color: white;
+            animation: text-glow 3s ease-in-out infinite;
         }
 
         .page-title {
