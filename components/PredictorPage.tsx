@@ -59,7 +59,11 @@ const PredictorPage: React.FC<PredictorPageProps> = ({ user, onUpdateUser }) => 
             const isRare = Math.random() < RARE_CHANCE;
             const multipliers = isRare ? RARE_MULTIPLIERS : COMMON_MULTIPLIERS;
             const value = multipliers[Math.floor(Math.random() * multipliers.length)];
-            const accuracy = Math.floor(Math.random() * 30) + 70; // 70% to 99%
+            
+            // Generate a random accuracy between 70% and 99%
+            const minAccuracy = 70;
+            const maxAccuracy = 99;
+            const accuracy = Math.floor(Math.random() * (maxAccuracy - minAccuracy + 1)) + minAccuracy;
 
             setPrediction({ value, accuracy });
             onUpdateUser({ ...user, predictionCount: user.predictionCount + 1 });
