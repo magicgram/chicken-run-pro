@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { User } from '../types';
 import CloseIcon from './icons/CloseIcon';
@@ -6,6 +5,7 @@ import UserIcon from './icons/UserIcon';
 import TestIcon from './icons/TestIcon';
 import DashboardIcon from './icons/DashboardIcon';
 import LanguageIcon from './icons/LanguageIcon';
+import LogoutIcon from './icons/LogoutIcon';
 import { useTranslations } from '../hooks/useTranslations';
 
 interface SidebarProps {
@@ -15,6 +15,7 @@ interface SidebarProps {
     onShowDashboard: () => void;
     onProfilePictureChange: (url: string) => void;
     onShowLanguageModal: () => void;
+    onLogout: () => void;
     user: User | null;
 }
 
@@ -29,7 +30,7 @@ const NavLink: React.FC<{ onClick: () => void; icon: React.ReactNode; text: stri
     </a>
 );
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onShowTestPage, onShowDashboard, user, onProfilePictureChange, onShowLanguageModal }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onShowTestPage, onShowDashboard, user, onProfilePictureChange, onShowLanguageModal, onLogout }) => {
     const { t } = useTranslations();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,6 +118,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onShowTestPage, onSh
                             icon={<LanguageIcon className="h-6 w-6 text-gray-400 group-hover:text-accent-cyan transition-colors" />}
                             text={t('sidebar.languages')}
                         />
+                         {user && (
+                           <NavLink 
+                                onClick={onLogout}
+                                icon={<LogoutIcon className="h-6 w-6 text-gray-400 group-hover:text-accent-magenta transition-colors" />}
+                                text={t('sidebar.logout')}
+                           />
+                        )}
                     </nav>
                 </div>
             </div>

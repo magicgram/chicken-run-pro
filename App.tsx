@@ -18,6 +18,21 @@ import LanguageModal from './components/LanguageModal';
 const ACTIVE_USER_KEY = 'minesPredictorActiveUser';
 const USER_DATA_KEY_PREFIX = 'minesPredictorUser:';
 
+
+// SVG Icons for the new header
+const SoundIcon: React.FC<{ className?: string }> = ({ className = 'h-6 w-6 text-white' }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+    </svg>
+);
+
+const InfoIcon: React.FC<{ className?: string }> = ({ className = 'h-6 w-6 text-white' }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+);
+
+
 const AppContent: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -156,6 +171,7 @@ const AppContent: React.FC = () => {
         // Only remove the active session key, not the user's data
         localStorage.removeItem(ACTIVE_USER_KEY);
         setUser(null);
+        setIsMenuOpen(false); // Close menu on logout
     };
 
     const updateUser = (updatedUser: User) => {
@@ -227,18 +243,11 @@ const AppContent: React.FC = () => {
         if (activeGuide === 'setup') return <SetupGuide />;
         if (!user) return <LoginPage onLogin={handleLogin} error={error} isLoading={isLoading} infoMessage={infoMessage} />;
         
-        return (
-            <>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold shimmer-text text-center mb-8 font-['Orbitron']" style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.4)'}}>
-                    Mines Predictor Pro
-                </h2>
-                <PredictorPage user={user} onUpdateUser={updateUser} />
-            </>
-        );
+        return <PredictorPage user={user} onUpdateUser={updateUser} />;
     };
 
     return (
-        <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+        <div className={`min-h-screen ${isPredictorPageActive ? '' : 'p-4 sm:p-6 lg:p-8'}`}>
             <PasswordModal 
                 isOpen={isPasswordModalOpen}
                 onClose={() => setIsPasswordModalOpen(false)}
@@ -256,57 +265,73 @@ const AppContent: React.FC = () => {
                 onProfilePictureChange={handleProfilePictureChange}
                 onShowLanguageModal={handleShowLanguageModal}
                 user={user}
+                onLogout={handleLogout}
             />
-            {/* Header updated to use CSS Grid for better responsiveness on mobile */}
-            <header className="grid grid-cols-[auto_1fr_auto] items-center gap-4 mb-10 p-4 rounded-xl bg-[#161a27] z-10">
-                {/* Left: Menu Button */}
-                <div>
-                    <button
-                        onClick={() => setIsMenuOpen(true)}
-                        className="p-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-cyan"
-                        aria-label="Open menu"
-                    >
-                        <MenuIcon className="h-6 w-6 text-white"/>
-                    </button>
-                </div>
-                
-                {/* Center: Title */}
-                <h1 
-                    onClick={handleShowDashboard}
-                    className={`text-center text-xl sm:text-3xl font-bold shimmer-text transition-opacity duration-300 truncate ${isPredictorPageActive ? 'opacity-0 pointer-events-none' : 'opacity-100 cursor-pointer hover:opacity-80'}`}
-                >
-                    Mines Pre...
-                </h1>
-
-                {/* Right: Logout / Guide Button */}
-                <div className="flex items-center justify-end">
-                    {user ? (
+            
+            {/* Header logic is now conditional based on predictor page activity */}
+            {isPredictorPageActive && user ? (
+                 <header className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center text-white z-20 bg-black/20">
+                    <h1 className="font-bold text-lg">{t('predictor.welcome')} - {user.id}</h1>
+                    <div className="flex items-center gap-4">
+                        <button className="p-1 rounded-full hover:bg-white/10 transition-colors"><SoundIcon /></button>
+                        <button className="p-1 rounded-full hover:bg-white/10 transition-colors"><InfoIcon /></button>
                         <button
-                            onClick={handleLogout}
-                            className="btn btn-dark p-3"
-                            aria-label="Logout"
+                            onClick={() => setIsMenuOpen(true)}
+                            className="p-1 rounded-full hover:bg-white/10 transition-colors"
+                            aria-label="Open menu"
                         >
-                            <LogoutIcon className="h-6 w-6" />
+                            <MenuIcon />
                         </button>
-                    ) : (
-                         isGuideVisible ? (
+                    </div>
+                </header>
+            ) : (
+                <header className="grid grid-cols-[auto_1fr_auto] items-center gap-4 mb-10 p-4 rounded-xl bg-[#161a27] z-10">
+                    <div>
+                        <button
+                            onClick={() => setIsMenuOpen(true)}
+                            className="p-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                            aria-label="Open menu"
+                        >
+                            <MenuIcon className="h-6 w-6 text-white"/>
+                        </button>
+                    </div>
+                    
+                    <h1 
+                        onClick={handleShowDashboard}
+                        className="text-center text-xl sm:text-3xl font-bold shimmer-text transition-opacity duration-300 truncate cursor-pointer hover:opacity-80"
+                    >
+                        Mines Pre...
+                    </h1>
+
+                    <div className="flex items-center justify-end">
+                        {user ? (
                             <button
-                                onClick={handleHideGuide}
-                                className="btn btn-dark text-sm"
+                                onClick={handleLogout}
+                                className="btn btn-dark p-3"
+                                aria-label="Logout"
                             >
-                                {t('header.hide')}
+                                <LogoutIcon className="h-6 w-6" />
                             </button>
-                         ) : (
-                            <button
-                                onClick={handleShowAccessGuide}
-                                className="btn btn-guide text-sm"
-                            >
-                                {t('header.guide')}
-                            </button>
-                         )
-                    )}
-                </div>
-            </header>
+                        ) : (
+                             isGuideVisible ? (
+                                <button
+                                    onClick={handleHideGuide}
+                                    className="btn btn-dark text-sm"
+                                >
+                                    {t('header.hide')}
+                                </button>
+                             ) : (
+                                <button
+                                    onClick={handleShowAccessGuide}
+                                    className="btn btn-guide text-sm"
+                                >
+                                    {t('header.guide')}
+                                </button>
+                             )
+                        )}
+                    </div>
+                </header>
+            )}
 
             <main className="main-content">
                 {renderContent()}
