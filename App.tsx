@@ -11,20 +11,17 @@ import type { User } from './types';
 import MenuIcon from './components/icons/MenuIcon';
 import LogoutIcon from './components/icons/LogoutIcon';
 import { LanguageProvider } from './context/LanguageContext';
+import { SoundProvider } from './context/SoundContext';
 import { useTranslations } from './hooks/useTranslations';
+import { useSound } from './hooks/useSound';
 import LanguageModal from './components/LanguageModal';
+import SoundIcon from './components/icons/SoundIcon';
+import SoundMutedIcon from './components/icons/SoundMutedIcon';
 
 // Local storage keys
 const ACTIVE_USER_KEY = 'minesPredictorActiveUser';
 const USER_DATA_KEY_PREFIX = 'minesPredictorUser:';
 
-
-// SVG Icons for the new header
-const SoundIcon: React.FC<{ className?: string }> = ({ className = 'h-6 w-6 text-white' }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-    </svg>
-);
 
 const InfoIcon: React.FC<{ className?: string }> = ({ className = 'h-6 w-6 text-white' }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -44,6 +41,7 @@ const AppContent: React.FC = () => {
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
     const [isLanguageModalOpen, setIsLanguageModalOpen] = useState<boolean>(false);
     const { t } = useTranslations();
+    const { isMuted, toggleMute } = useSound();
 
     
     // State to track login attempts from localStorage
@@ -273,7 +271,13 @@ const AppContent: React.FC = () => {
                  <header className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center text-white z-20 bg-black/20">
                     <h1 className="font-bold text-lg">{t('predictor.welcome')} - {user.id}</h1>
                     <div className="flex items-center gap-4">
-                        <button className="p-1 rounded-full hover:bg-white/10 transition-colors"><SoundIcon /></button>
+                        <button 
+                            onClick={toggleMute} 
+                            className="p-1 rounded-full hover:bg-white/10 transition-colors"
+                            aria-label={isMuted ? "Unmute sound" : "Mute sound"}
+                        >
+                            {isMuted ? <SoundMutedIcon /> : <SoundIcon />}
+                        </button>
                         <button className="p-1 rounded-full hover:bg-white/10 transition-colors"><InfoIcon /></button>
                         <button
                             onClick={() => setIsMenuOpen(true)}
@@ -343,7 +347,9 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => (
     <LanguageProvider>
-        <AppContent />
+        <SoundProvider>
+            <AppContent />
+        </SoundProvider>
     </LanguageProvider>
 );
 

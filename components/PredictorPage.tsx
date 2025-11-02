@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { User } from '../types';
 import { useTranslations } from '../hooks/useTranslations';
+import { useSound } from '../hooks/useSound';
 import { verificationService } from '../services/verificationService';
 
 // --- Constants ---
@@ -28,6 +29,7 @@ const PredictorPage: React.FC<PredictorPageProps> = ({ user, onUpdateUser }) => 
 
     const chickenRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslations();
+    const { playSound } = useSound();
 
     const predictionsUsed = user.predictionCount;
     const predictionsLeft = PREDICTION_LIMIT - predictionsUsed;
@@ -46,12 +48,14 @@ const PredictorPage: React.FC<PredictorPageProps> = ({ user, onUpdateUser }) => 
             if(!isGenerating && !showResult) onUpdateUser({ ...user, awaitingDeposit: true });
             return;
         }
-
+        
+        playSound('getSignal');
         setIsGenerating(true);
 
         // Trigger animation
         if (chickenRef.current) {
             chickenRef.current.classList.add('running');
+            playSound('chickenRun');
         }
 
         setTimeout(() => {
@@ -78,6 +82,7 @@ const PredictorPage: React.FC<PredictorPageProps> = ({ user, onUpdateUser }) => 
     };
 
     const handleNextRound = () => {
+        playSound('nextRound');
         setShowResult(false);
         setPrediction(null);
     };
