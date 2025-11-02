@@ -16,6 +16,7 @@ const getAudioContext = () => {
     return audioContext;
 };
 
+// --- Professional Sound Effects ---
 const playSoundEffect = (type: 'getSignal' | 'nextRound' | 'chickenRun') => {
     try {
         const ctx = getAudioContext();
@@ -25,63 +26,78 @@ const playSoundEffect = (type: 'getSignal' | 'nextRound' | 'chickenRun') => {
             ctx.resume();
         }
 
-        if (type === 'getSignal') {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.type = 'triangle';
-            oscillator.frequency.setValueAtTime(800, ctx.currentTime);
-            gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.2);
-        } else if (type === 'nextRound') {
-            const osc1 = ctx.createOscillator();
-            const osc2 = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            osc1.connect(gainNode);
-            osc2.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            osc1.type = 'sine';
-            osc2.type = 'sine';
-            osc1.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-            osc2.frequency.setValueAtTime(659.25, ctx.currentTime); // E5
-            gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        const now = ctx.currentTime;
 
-            osc1.start(ctx.currentTime);
-            osc2.start(ctx.currentTime);
-            osc1.stop(ctx.currentTime + 0.3);
-            osc2.stop(ctx.currentTime + 0.3);
+        if (type === 'getSignal') {
+            // A sharp, digital "pew" sound for UI interaction
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            
+            osc.type = 'sawtooth';
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.15, now + 0.01); // Quick attack
+            
+            osc.frequency.setValueAtTime(1200, now);
+            osc.frequency.exponentialRampToValueAtTime(400, now + 0.15); // Pitch drop
+            
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2); // Fast decay
+
+            osc.start(now);
+            osc.stop(now + 0.2);
+        } else if (type === 'nextRound') {
+            // A pleasant, ascending C-major arpeggio for a positive confirmation
+            const notes = [392, 523, 659]; // G4, C5, E5
+            
+            notes.forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                
+                const startTime = now + i * 0.08;
+                
+                osc.type = 'triangle'; // Softer, "game-like" tone
+                osc.frequency.setValueAtTime(freq, startTime);
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.1, startTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.2);
+
+                osc.start(startTime);
+                osc.stop(startTime + 0.2);
+            });
         } else if (type === 'chickenRun') {
-            const noise = ctx.createBufferSource();
-            const bufferSize = Math.floor(ctx.sampleRate * 0.5);
+            // A dynamic "whoosh" sound to match the animation
+            const duration = 2.8;
+
+            const bufferSize = ctx.sampleRate * duration;
             const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-            const data = buffer.getChannelData(0);
+            const output = buffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 2 - 1;
+                output[i] = Math.random() * 2 - 1; // White noise
             }
+            const noise = ctx.createBufferSource();
             noise.buffer = buffer;
             
-            const bandpass = ctx.createBiquadFilter();
-            bandpass.type = 'bandpass';
-            bandpass.frequency.setValueAtTime(800, ctx.currentTime);
-            bandpass.Q.setValueAtTime(20, ctx.currentTime);
-            
-            const gainNode = ctx.createGain();
-            gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 2.5);
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.Q.value = 5;
+            filter.frequency.setValueAtTime(2000, now); // Start high
+            filter.frequency.exponentialRampToValueAtTime(100, now + duration * 0.8); // Sweep low
 
-            noise.connect(bandpass);
-            bandpass.connect(gainNode);
+            const gainNode = ctx.createGain();
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.15, now + 0.2); // Fade in
+            gainNode.gain.linearRampToValueAtTime(0.15, now + duration - 0.5); // Hold
+            gainNode.gain.linearRampToValueAtTime(0, now + duration); // Fade out
+            
+            noise.connect(filter);
+            filter.connect(gainNode);
             gainNode.connect(ctx.destination);
             
-            noise.loop = true;
-            noise.start(ctx.currentTime);
-            noise.stop(ctx.currentTime + 2.8);
+            noise.start(now);
+            noise.stop(now + duration);
         }
 
     } catch (e) {
