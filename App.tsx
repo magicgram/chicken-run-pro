@@ -185,10 +185,14 @@ const AppContent: React.FC = () => {
         }
     };
 
-    const handleShowAccessGuide = () => {
-        setShowTestPage(false);
-        setActiveGuide('access');
-        setIsMenuOpen(false);
+    const toggleAccessGuide = () => {
+        setIsMenuOpen(false); // Always close menu when interacting with guide
+        if (activeGuide === 'access') {
+            setActiveGuide(null);
+        } else {
+            setShowTestPage(false);
+            setActiveGuide('access');
+        }
     };
     
     const handleShowSetupGuide = () => {
@@ -196,11 +200,6 @@ const AppContent: React.FC = () => {
         setActiveGuide('setup');
         setIsMenuOpen(false);
     }
-
-    const handleHideGuide = () => {
-        setActiveGuide(null);
-        setIsMenuOpen(false);
-    };
 
     const handleShowTestPage = () => {
         setIsMenuOpen(false);
@@ -285,9 +284,9 @@ const AppContent: React.FC = () => {
                         </button>
                     )}
                     <button 
-                        onClick={handleShowAccessGuide}
+                        onClick={toggleAccessGuide}
                         className="p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
-                        aria-label="Open Guide"
+                        aria-label={activeGuide === 'access' ? `${t('header.hide')} ${t('header.guide')}` : t('header.guide')}
                     >
                         <InfoIcon />
                     </button>
