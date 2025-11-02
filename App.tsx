@@ -276,7 +276,6 @@ const AppContent: React.FC = () => {
                 )}
                 <div className="flex items-center gap-4">
                     {isPredictorPageActive && (
-                        <>
                         <button 
                             onClick={toggleMute} 
                             className="p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
@@ -284,9 +283,14 @@ const AppContent: React.FC = () => {
                         >
                             {isMuted ? <SoundMutedIcon /> : <SoundIcon />}
                         </button>
-                        <button className="p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"><InfoIcon /></button>
-                        </>
                     )}
+                    <button 
+                        onClick={handleShowAccessGuide}
+                        className="p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
+                        aria-label="Open Guide"
+                    >
+                        <InfoIcon />
+                    </button>
                     <button
                         onClick={() => setIsMenuOpen(true)}
                         className="p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
