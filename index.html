@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mines Predictor Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #111217;
+            --bg-secondary: #0A0518;
+            --accent-cyan: #00d4ff;
+            --accent-magenta: #e028c7;
+            --text-primary: #edf2f7;
+            --text-secondary: #a0aec0;
+            --glow-cyan: rgba(0, 212, 255, 0.7);
+            --glow-magenta: rgba(224, 40, 199, 0.7);
+            --border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes border-glow {
+            0% { border-color: var(--accent-cyan); box-shadow: 0 0 15px var(--glow-cyan); }
+            50% { border-color: var(--accent-magenta); box-shadow: 0 0 15px var(--glow-magenta); }
+            100% { border-color: var(--accent-cyan); box-shadow: 0 0 15px var(--glow-cyan); }
+        }
+
+        @keyframes subtle-bomb-pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(255, 82, 82, 0.7)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 12px rgba(255, 82, 82, 1)); }
+        }
+        
+        @keyframes star-shimmer {
+            0%, 100% { filter: drop-shadow(0 0 4px rgba(253, 224, 71, 0.7)); }
+            50% { filter: drop-shadow(0 0 10px rgba(253, 224, 71, 1)); }
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shimmer-animation {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .main-content {
+            animation: fade-in-up 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .glassmorphic-card {
+            background: linear-gradient(165deg, rgba(224, 40, 199, 0.7) 0%, rgba(0, 212, 255, 0.6) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .shimmer-text {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, var(--accent-magenta), var(--accent-cyan), var(--accent-magenta));
+            background-size: 200% auto;
+            color: #fff;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-animation 4s linear infinite;
+        }
+        
+        .loading-spinner {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            display: inline-block;
+            border-top: 4px solid var(--accent-cyan);
+            border-right: 4px solid transparent;
+            border-bottom: 4px solid var(--accent-magenta);
+            border-left: 4px solid transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Component Styles */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.75rem; /* ~12px */
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: none; /* All buttons will be borderless by default now */
+            background-color: #0c0519; /* Dark inner color from image */
+            color: var(--text-primary);
+        }
+
+        /* The glowing border effect for primary buttons */
+        .btn-dark::before, .btn-guide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border-radius: inherit; /* Match the button's border-radius */
+            padding: 2px; /* This creates the border thickness */
+            background: linear-gradient(135deg, var(--accent-magenta), var(--accent-cyan));
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box, /* This is the "hole" for the content */
+                linear-gradient(#fff 0 0); /* This is the outer shape */
+            -webkit-mask-composite: xor;
+            mask-composite: exclude; /* Punch out the content area, leaving only the border */
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover effect for all buttons */
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background-color: #1a0f30; /* Slightly lighter on hover */
+        }
+        
+        .btn:hover:not(:disabled)::before {
+            filter: brightness(1.2) drop-shadow(0 0 6px var(--glow-magenta)) drop-shadow(0 0 6px var(--glow-cyan)); /* Intensify glow on hover */
+        }
+        
+        /* Disabled state for all buttons */
+        .btn:disabled, .btn-dark:disabled {
+            cursor: not-allowed;
+            background-color: rgba(26, 32, 44, 0.4);
+            color: var(--text-secondary);
+            transform: none;
+            opacity: 0.6;
+        }
+        
+        .btn:disabled::before, .btn-dark:disabled::before {
+            display: none; /* Hide glow on disabled buttons */
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            color: var(--text-primary);
+            background-color: rgba(10, 5, 24, 0.6); /* Dark semi-transparent background */
+            border: 2px solid rgba(0, 212, 255, 0.7); /* Bright glowing border */
+            border-radius: 0.75rem; /* ~12px */
+            transition: all 0.3s ease;
+            /* Inset shadow for depth + outer glow for effect */
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.6), 0 0 8px rgba(0, 212, 255, 0.4);
+        }
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan); /* Make border solid on focus */
+            /* Intensify glow on focus */
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.6), 0 0 15px var(--glow-cyan);
+        }
+
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@vercel/node": "https://aistudiocdn.com/@vercel/node@^5.5.0",
+    "@vercel/kv": "https://aistudiocdn.com/@vercel/kv@^3.0.0",
+    "vite": "https://aistudiocdn.com/vite@^7.1.12",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.0"
+  }
+}
+</script>
+</head>
+<body class="text-white">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
