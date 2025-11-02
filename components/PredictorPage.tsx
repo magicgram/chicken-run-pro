@@ -159,7 +159,7 @@ const PredictorPage: React.FC<PredictorPageProps> = ({ user, onUpdateUser }) => 
                         <div className="result-info">
                             {t('predictor.accuracyLabel').replace('{accuracy}', prediction.accuracy.toString())}
                             <br />
-                            {t('predictor.cashoutLabel')}
+                            {t('predictor.cashoutLabel').replace('{value}', prediction.value)}
                         </div>
                          <button 
                             className="action-button"
