@@ -7,6 +7,7 @@ import DashboardIcon from './icons/DashboardIcon';
 import LanguageIcon from './icons/LanguageIcon';
 import LogoutIcon from './icons/LogoutIcon';
 import { useTranslations } from '../hooks/useTranslations';
+import NexusPlayLogoIcon from './icons/NexusPlayLogoIcon';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -124,6 +125,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onShowTestPage, onSh
                            />
                         )}
                     </nav>
+                    
+                    {/* Branding Footer */}
+                    <div className="p-4">
+                        <div className="flex items-center justify-end gap-2">
+                            <NexusPlayLogoIcon className="h-5 w-5" />
+                            <span 
+                                className="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#A076F9] to-[#65A4FF]"
+                            >
+                                NexusPlay
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
