@@ -22,9 +22,8 @@ interface SidebarProps {
 const NavLink: React.FC<{ onClick: () => void; icon: React.ReactNode; text: string }> = ({ onClick, icon, text }) => (
     <a 
         onClick={onClick} 
-        className="group relative flex items-center w-full p-3 space-x-4 text-base text-gray-300 rounded-lg hover:bg-white/10 focus:outline-none focus:bg-white/10 transition-colors duration-200 cursor-pointer overflow-hidden"
+        className="group relative flex items-center w-full p-3 space-x-4 text-base text-gray-200 rounded-lg hover:bg-black/20 focus:outline-none focus:bg-black/20 transition-colors duration-200 cursor-pointer"
     >
-        <span className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-accent-cyan to-accent-magenta transform scale-y-0 group-hover:scale-y-100 group-focus:scale-y-100 transition-transform duration-300 origin-center ease-in-out"></span>
         {icon}
         <span>{text}</span>
     </a>
@@ -54,26 +53,25 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onShowTestPage, onSh
         >
             {/* Overlay */}
             <div 
-                className={`absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ease-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}
                 onClick={onClose}
             ></div>
             
             {/* Close Button on top right of screen */}
              <button 
                 onClick={onClose} 
-                className={`absolute top-5 right-5 text-gray-400 hover:text-white hover:scale-110 transform transition-all duration-300 ease-out z-50 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute top-5 right-5 text-gray-200 hover:text-white hover:scale-110 transform transition-all duration-300 ease-out z-50 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
                 aria-label="Close menu"
             >
                 <CloseIcon className="h-8 w-8" />
             </button>
 
-            {/* Panel - Upgraded with a rich gradient background */}
-            <div className={`relative flex flex-col w-72 max-w-[calc(100vw-40px)] h-full backdrop-blur-md border-r border-white/10 bg-gradient-to-b from-[#100a28] to-[#3b0734] shadow-2xl transform transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            {/* Panel */}
+            <div className={`relative flex flex-col w-72 max-w-[calc(100vw-40px)] h-full bg-slate-700/80 border-r-4 border-slate-800 shadow-2xl transform transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 
-                {/* Removed p-6 from parent and added px-4 to children for more control */}
                 <div className="flex flex-col h-full">
-                    {/* User Info - Reduced margins and icon size for a sleeker look */}
-                    <div className="flex items-center p-4 pt-16 space-x-3 border-b border-white/10">
+                    {/* User Info */}
+                    <div className="flex items-center p-4 pt-16 space-x-3 border-b-2 border-slate-800">
                          <input
                             type="file"
                             id="profile-pic-upload"
@@ -82,12 +80,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onShowTestPage, onSh
                             onChange={handleFileChange}
                             disabled={!user}
                         />
-                        <label htmlFor="profile-pic-upload" className={`relative p-0.5 rounded-full gradient-border flex-shrink-0 ${user ? 'cursor-pointer' : 'cursor-default'}`}>
-                            <div className="w-12 h-12 rounded-full bg-bg-secondary flex items-center justify-center overflow-hidden">
+                        <label htmlFor="profile-pic-upload" className={`relative p-0.5 rounded-full border-2 border-yellow-400 flex-shrink-0 ${user ? 'cursor-pointer' : 'cursor-default'}`}>
+                            <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
                                 {user?.profilePictureUrl ? (
                                     <img src={user.profilePictureUrl} alt="Profile" className="w-full h-full object-cover" />
                                 ) : (
-                                    <UserIcon className="h-8 w-8 text-accent-cyan"/>
+                                    <UserIcon className="h-8 w-8 text-yellow-400"/>
                                 )}
                             </div>
                         </label>
@@ -95,33 +93,33 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onShowTestPage, onSh
                             <p className="font-bold text-base text-white font-['Orbitron'] tracking-wide truncate">
                                 {user ? `${t('sidebar.player')} ${user.id}` : t('sidebar.welcome')}
                             </p>
-                            <p className="text-xs shimmer-text">Mines Predictor Pro</p>
+                            <p className="text-xs text-yellow-300">Chicken Run Predictor</p>
                         </div>
                     </div>
 
-                    {/* Nav Links - Reduced top padding */}
+                    {/* Nav Links */}
                     <nav className="flex-1 space-y-3 p-4">
                         {user && (
                            <NavLink 
                                 onClick={onShowDashboard}
-                                icon={<DashboardIcon className="h-6 w-6 text-gray-400 group-hover:text-accent-cyan transition-colors" />}
+                                icon={<DashboardIcon className="h-6 w-6 text-gray-300 group-hover:text-yellow-300 transition-colors" />}
                                 text={t('sidebar.dashboard')}
                            />
                         )}
                         <NavLink 
                             onClick={onShowTestPage}
-                            icon={<TestIcon className="h-6 w-6 text-gray-400 group-hover:text-accent-cyan transition-colors" />}
+                            icon={<TestIcon className="h-6 w-6 text-gray-300 group-hover:text-yellow-300 transition-colors" />}
                             text={t('sidebar.testPostback')}
                         />
                         <NavLink 
                             onClick={onShowLanguageModal}
-                            icon={<LanguageIcon className="h-6 w-6 text-gray-400 group-hover:text-accent-cyan transition-colors" />}
+                            icon={<LanguageIcon className="h-6 w-6 text-gray-300 group-hover:text-yellow-300 transition-colors" />}
                             text={t('sidebar.languages')}
                         />
                          {user && (
                            <NavLink 
                                 onClick={onLogout}
-                                icon={<LogoutIcon className="h-6 w-6 text-gray-400 group-hover:text-accent-magenta transition-colors" />}
+                                icon={<LogoutIcon className="h-6 w-6 text-gray-300 group-hover:text-red-400 transition-colors" />}
                                 text={t('sidebar.logout')}
                            />
                         )}

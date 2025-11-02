@@ -94,21 +94,22 @@ const PredictorPage: React.FC<PredictorPageProps> = ({ user, onUpdateUser }) => 
     if (user.awaitingDeposit || predictionsLeft <= 0) {
         const depositInfo = t('predictor.depositInfo').replace('{limit}', PREDICTION_LIMIT.toString());
         return (
-            <div className="flex items-center justify-center h-screen bg-gray-800 p-4">
-                <div className="text-center p-8 glassmorphic-card rounded-2xl shadow-2xl max-w-lg mx-auto">
-                    <h3 className="text-2xl font-bold text-white mb-3 font-['Orbitron']">{t('predictor.limitTitle')}</h3>
-                    <p className="text-text-secondary mb-6">{t('predictor.limitSubtitle')}</p>
-                    <div className="bg-blue-900/40 border border-white/10 rounded-lg p-4 mb-6">
-                        <p className="font-semibold text-white">{t('predictor.whyDeposit')}</p>
-                        <p className="text-sm text-gray-300 mt-1">{depositInfo}</p>
-                    </div>
-                    <button
+             <div className="flex items-center justify-center min-h-screen p-4">
+                 <div className="static-clouds"></div>
+                 <div className="text-center p-8 content-card max-w-lg mx-auto">
+                     <h3 className="text-2xl font-bold text-white mb-3 page-title">{t('predictor.limitTitle')}</h3>
+                     <p className="text-gray-200 mb-6">{t('predictor.limitSubtitle')}</p>
+                     <div className="bg-black/20 border-2 border-yellow-500/50 rounded-lg p-4 mb-6">
+                         <p className="font-semibold text-white">{t('predictor.whyDeposit')}</p>
+                         <p className="text-sm text-gray-200 mt-1">{depositInfo}</p>
+                     </div>
+                     <button
                         onClick={handleDeposit}
-                        className="w-full btn btn-dark"
+                        className="w-full btn-game"
                     >
                         {t('predictor.depositNow')}
                     </button>
-                    <p className="text-xs text-gray-400 mt-4">{t('predictor.depositNote')}</p>
+                    <p className="text-xs text-gray-300 mt-4">{t('predictor.depositNote')}</p>
                 </div>
             </div>
         );

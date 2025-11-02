@@ -36,7 +36,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, error, isLoading, infoMe
         if (infoMessage.includes('successfully completed registration')) {
             const lines = t('info.registeredNeedsDeposit').split('\n');
             return (
-                 <div className="p-4 bg-black/30 border border-purple-500/50 rounded-lg text-sm space-y-3">
+                 <div className="p-3 bg-black/20 border-2 border-yellow-500/50 rounded-lg text-sm space-y-2">
                      {lines.map((line, index) => {
                          const trimmedLine = line.trim();
                          const firstSpaceIndex = trimmedLine.indexOf(' ');
@@ -44,8 +44,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, error, isLoading, infoMe
                          const text = trimmedLine.substring(firstSpaceIndex + 1);
                          return (
                              <div key={index} className="flex items-start">
-                                 <span className="mr-3 text-lg text-purple-400">{icon}</span>
-                                 <p className="text-gray-300 flex-1">{text}</p>
+                                 <span className="mr-3 text-lg text-yellow-300">{icon}</span>
+                                 <p className="text-gray-200 flex-1">{text}</p>
                              </div>
                          );
                      })}
@@ -54,23 +54,23 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, error, isLoading, infoMe
         }
         // Fallback for any other info message
         return (
-            <div className="p-4 bg-black/30 border border-purple-500/50 rounded-lg text-sm space-y-3">
-                <p className="text-gray-300 flex-1">{infoMessage}</p>
+            <div className="p-3 bg-black/20 border-2 border-yellow-500/50 rounded-lg text-sm space-y-2">
+                <p className="text-gray-200 flex-1">{infoMessage}</p>
             </div>
         )
     }
 
     return (
         <div className="flex flex-col items-center justify-center">
-            <div className="w-full max-w-md p-8 space-y-6 glassmorphic-card rounded-2xl shadow-2xl">
+            <div className="w-full max-w-md p-8 space-y-6 content-card">
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold text-white font-['Orbitron']">{t('login.title')}</h2>
+                    <h2 className="text-3xl font-bold page-title">{t('login.title')}</h2>
                     <p className="text-gray-200 mt-2">{t('login.subtitle')}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                         <label htmlFor="userId" className="text-sm font-medium text-gray-300 mb-2 block">{t('login.playerIDLabel')}</label>
+                         <label htmlFor="userId" className="text-sm font-medium text-gray-200 mb-2 block">{t('login.playerIDLabel')}</label>
                         <input
                             id="userId"
                             type="text"
@@ -84,18 +84,18 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, error, isLoading, infoMe
                     </div>
 
                     {isLoading && (
-                        <div className="flex items-center p-4 bg-black/30 border border-blue-500/50 rounded-lg text-sm space-x-3">
+                        <div className="flex items-center p-3 bg-black/20 border-2 border-blue-400/50 rounded-lg text-sm space-x-3">
                             <span className="text-lg">🔍</span>
-                            <p className="text-blue-300">{t('login.checkingStatus')}</p>
+                            <p className="text-blue-200">{t('login.checkingStatus')}</p>
                         </div>
                     )}
 
                     {infoMessage && !isLoading && renderInfoMessage()}
 
                     {error && !isLoading && 
-                        <div className="flex items-start p-4 bg-red-900/40 border border-red-500/50 rounded-lg text-sm space-x-3">
-                             <span className="text-lg text-red-400 mt-1">❌</span>
-                             <p className="text-red-300 whitespace-pre-wrap flex-1">{t(error)}</p>
+                        <div className="flex items-start p-3 bg-red-900/40 border-2 border-red-500/50 rounded-lg text-sm space-x-3">
+                             <span className="text-lg text-red-300 mt-1">❌</span>
+                             <p className="text-red-200 whitespace-pre-wrap flex-1">{t(error)}</p>
                         </div>
                     }
 
@@ -103,10 +103,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, error, isLoading, infoMe
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full btn btn-dark"
+                            className="w-full btn-game"
                         >
                             {isLoading ? (
-                                <div className="w-6 h-6 border-2 border-dashed rounded-full animate-spin border-white mx-auto"></div>
+                                <div className="w-6 h-6 border-2 border-dashed rounded-full animate-spin border-white/70 mx-auto"></div>
                             ) : (
                                 t('login.continueButton')
                             )}
@@ -120,7 +120,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, error, isLoading, infoMe
                             <div className="w-full border-t border-white/20" />
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span style={{ backgroundColor: '#3c2a8a' }} className="px-3 text-gray-300">
+                            <span style={{ backgroundColor: '#8C5A3A' }} className="px-3 text-gray-200">
                                 {t('login.noAccount')}
                             </span>
                         </div>
@@ -129,7 +129,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, error, isLoading, infoMe
                     <button
                         onClick={handleRegister}
                         type="button"
-                        className="w-full btn btn-dark"
+                        className="w-full btn-game"
                     >
                         {t('login.registerButton')}
                     </button>

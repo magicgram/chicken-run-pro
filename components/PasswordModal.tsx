@@ -61,13 +61,13 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ isOpen, onClose, onSucces
         >
             <div 
                 ref={modalRef}
-                className="w-full max-w-sm p-8 space-y-6 glassmorphic-card rounded-2xl shadow-2xl main-content"
+                className="w-full max-w-sm p-8 space-y-6 content-card main-content"
             >
                 <div className="text-center">
-                    <h2 id="password-modal-title" className="text-2xl font-bold text-white font-['Orbitron']">
+                    <h2 id="password-modal-title" className="text-2xl font-bold page-title">
                         {t('passwordModal.title')}
                     </h2>
-                    <p className="text-text-secondary mt-2">{t('passwordModal.subtitle')}</p>
+                    <p className="text-gray-200 mt-2">{t('passwordModal.subtitle')}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -93,16 +93,16 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ isOpen, onClose, onSucces
                     )}
 
                     <div className="flex gap-4 pt-2">
-                        <button
+                         <button
                             type="button"
                             onClick={onClose}
-                            className="w-full btn btn-dark"
+                            className="w-full btn-game"
                         >
                             {t('passwordModal.cancel')}
                         </button>
                         <button
                             type="submit"
-                            className="w-full btn btn-dark"
+                            className="w-full btn-game"
                         >
                             {t('passwordModal.submit')}
                         </button>

@@ -35,10 +35,10 @@ const LanguageModal: React.FC<LanguageModalProps> = ({ isOpen, onClose }) => {
         >
             <div 
                 ref={modalRef}
-                className="w-full max-w-sm p-6 space-y-6 glassmorphic-card rounded-2xl shadow-2xl main-content"
+                className="w-full max-w-sm p-6 space-y-6 content-card main-content"
             >
                 <div className="text-center">
-                    <h2 id="language-modal-title" className="text-2xl font-bold text-white font-['Orbitron']">
+                    <h2 id="language-modal-title" className="text-2xl font-bold page-title">
                         {t('languageModal.title')}
                     </h2>
                 </div>
@@ -50,8 +50,8 @@ const LanguageModal: React.FC<LanguageModalProps> = ({ isOpen, onClose }) => {
                             onClick={() => handleLanguageSelect(code)}
                             className={`w-full flex items-center p-3 rounded-lg transition-all duration-200 text-left font-semibold text-lg ${
                                 language === code
-                                ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-md'
-                                : 'bg-black/30 hover:bg-white/10 text-gray-200'
+                                ? 'bg-yellow-500/80 text-white shadow-md ring-2 ring-white'
+                                : 'bg-black/30 hover:bg-black/50 text-gray-200'
                             }`}
                         >
                             <span className="mr-4 text-2xl">{flag}</span>

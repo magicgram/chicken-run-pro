@@ -227,13 +227,13 @@ const AppContent: React.FC = () => {
     if (isLoading && !user) { // Only show full-screen loader on initial load
         return (
             <div className="flex items-center justify-center min-h-screen">
+                 <div className="static-clouds"></div>
                 <div className="loading-spinner"></div>
             </div>
         );
     }
     
-    const isGuideVisible = activeGuide !== null;
-    const isPredictorPageActive = user && !isGuideVisible && !showTestPage;
+    const isPredictorPageActive = user && !activeGuide && !showTestPage;
 
     const renderContent = () => {
         if (showTestPage) return <TestPage onShowSetupGuide={handleShowSetupGuide} />;
@@ -245,7 +245,9 @@ const AppContent: React.FC = () => {
     };
 
     return (
-        <div className={`min-h-screen ${isPredictorPageActive ? '' : 'p-4 sm:p-6 lg:p-8'}`}>
+        <div className={isPredictorPageActive ? '' : 'page-container'}>
+            {!isPredictorPageActive && <div className="static-clouds"></div>}
+
             <PasswordModal 
                 isOpen={isPasswordModalOpen}
                 onClose={() => setIsPasswordModalOpen(false)}
@@ -266,78 +268,37 @@ const AppContent: React.FC = () => {
                 onLogout={handleLogout}
             />
             
-            {/* Header logic is now conditional based on predictor page activity */}
-            {isPredictorPageActive && user ? (
-                 <header className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center text-white z-20 bg-black/20">
-                    <h1 className="font-bold text-lg">{t('predictor.welcome')} - {user.id}</h1>
-                    <div className="flex items-center gap-4">
+            <header className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center text-white z-20">
+                {isPredictorPageActive && user ? (
+                     <h1 className="font-bold text-lg text-shadow">{t('predictor.welcome')} - {user.id}</h1>
+                ) : (
+                    <div /> // Placeholder to keep the menu button on the right
+                )}
+                <div className="flex items-center gap-4">
+                    {isPredictorPageActive && (
+                        <>
                         <button 
                             onClick={toggleMute} 
-                            className="p-1 rounded-full hover:bg-white/10 transition-colors"
+                            className="p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
                             aria-label={isMuted ? "Unmute sound" : "Mute sound"}
                         >
                             {isMuted ? <SoundMutedIcon /> : <SoundIcon />}
                         </button>
-                        <button className="p-1 rounded-full hover:bg-white/10 transition-colors"><InfoIcon /></button>
-                        <button
-                            onClick={() => setIsMenuOpen(true)}
-                            className="p-1 rounded-full hover:bg-white/10 transition-colors"
-                            aria-label="Open menu"
-                        >
-                            <MenuIcon />
-                        </button>
-                    </div>
-                </header>
-            ) : (
-                <header className="grid grid-cols-[auto_1fr_auto] items-center gap-4 mb-10 p-4 rounded-xl bg-[#161a27] z-10">
-                    <div>
-                        <button
-                            onClick={() => setIsMenuOpen(true)}
-                            className="p-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-cyan"
-                            aria-label="Open menu"
-                        >
-                            <MenuIcon className="h-6 w-6 text-white"/>
-                        </button>
-                    </div>
-                    
-                    <h1 
-                        onClick={handleShowDashboard}
-                        className="text-center text-xl sm:text-3xl font-bold shimmer-text transition-opacity duration-300 truncate cursor-pointer hover:opacity-80"
+                        <button className="p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"><InfoIcon /></button>
+                        </>
+                    )}
+                    <button
+                        onClick={() => setIsMenuOpen(true)}
+                        className="p-1 rounded-full bg-black/20 hover:bg-black/40 transition-colors"
+                        aria-label="Open menu"
                     >
-                        Mines Pre...
-                    </h1>
+                        <MenuIcon />
+                    </button>
+                </div>
+            </header>
 
-                    <div className="flex items-center justify-end">
-                        {user ? (
-                            <button
-                                onClick={handleLogout}
-                                className="btn btn-dark p-3"
-                                aria-label="Logout"
-                            >
-                                <LogoutIcon className="h-6 w-6" />
-                            </button>
-                        ) : (
-                             isGuideVisible ? (
-                                <button
-                                    onClick={handleHideGuide}
-                                    className="btn btn-dark text-sm"
-                                >
-                                    {t('header.hide')}
-                                </button>
-                             ) : (
-                                <button
-                                    onClick={handleShowAccessGuide}
-                                    className="btn btn-guide text-sm"
-                                >
-                                    {t('header.guide')}
-                                </button>
-                             )
-                        )}
-                    </div>
-                </header>
-            )}
 
-            <main className="main-content">
+            <main className="main-content w-full">
                 {renderContent()}
             </main>
         </div>
