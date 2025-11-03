@@ -43,15 +43,6 @@
             to { background-position: -500px 0, -425px 50px; }
         }
         
-        @keyframes text-glow {
-            0%, 100% {
-                text-shadow: 0 0 4px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.5), 0 0 12px rgba(241, 196, 15, 0.8);
-            }
-            50% {
-                text-shadow: 0 0 8px rgba(255, 255, 255, 1), 0 0 16px rgba(255, 255, 255, 0.8), 0 0 24px rgba(243, 156, 18, 1);
-            }
-        }
-
         @keyframes shine-animation {
             0% {
                 transform: translateX(-200%) skewX(-25deg);
@@ -62,6 +53,22 @@
             100% {
                 transform: translateX(200%) skewX(-25deg);
             }
+        }
+        
+        @keyframes flip-in {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) rotateX(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+        
+        @keyframes fade-in-sub {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- NEW GAME THEME STYLES --- */
@@ -127,11 +134,35 @@
             color: var(--text-on-wood);
         }
 
-        .app-title {
+        /* --- New Title Styles --- */
+        .app-title-main {
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
+            font-size: clamp(2.5rem, 12vw, 4.5rem);
             color: white;
-            animation: text-glow 3s ease-in-out infinite;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #f1c40f, 0 0 20px #f1c40f, 0 0 25px #f1c40f;
+            letter-spacing: 0.1em;
+            display: inline-block;
+        }
+        
+        .app-title-main .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(-50px) rotateX(90deg);
+            animation: flip-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        
+        .app-title-sub {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: clamp(1rem, 5vw, 1.5rem);
+            color: var(--yellow-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-top: -0.5rem;
+            opacity: 0;
+            animation: fade-in-sub 1s ease-out 0.8s forwards;
+            text-shadow: 0 0 5px rgba(241, 196, 15, 0.7);
         }
 
         .page-title {
