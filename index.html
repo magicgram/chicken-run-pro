@@ -52,6 +52,18 @@
             }
         }
 
+        @keyframes shine-animation {
+            0% {
+                transform: translateX(-200%) skewX(-25deg);
+            }
+            15% {
+                transform: translateX(200%) skewX(-25deg);
+            }
+            100% {
+                transform: translateX(200%) skewX(-25deg);
+            }
+        }
+
         /* --- NEW GAME THEME STYLES --- */
         :root {
             --sky-top: #89cff0;
@@ -154,6 +166,8 @@
             text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
             transition: all 0.1s ease;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
         .btn-game:hover:not(:disabled) {
             filter: brightness(1.05);
@@ -375,6 +389,8 @@
             border-bottom: 6px solid #d35400;
             text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
             transition: all 0.1s ease;
+            position: relative;
+            overflow: hidden;
         }
         .action-button:active {
             transform: translateY(3px);
@@ -384,6 +400,18 @@
             filter: grayscale(0.7);
             cursor: not-allowed;
             opacity: 0.7;
+        }
+        
+        .btn-game::after, .action-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+            animation: shine-animation 5s infinite;
+            pointer-events: none;
         }
 
         .result-overlay {
