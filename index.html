@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         @keyframes subtle-bomb-pulse {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(255, 82, 82, 0.7)); }
@@ -137,12 +137,29 @@
         /* --- New Title Styles --- */
         .app-title-main {
             font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: clamp(2.5rem, 12vw, 4.5rem);
-            color: white;
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #f1c40f, 0 0 20px #f1c40f, 0 0 25px #f1c40f;
-            letter-spacing: 0.1em;
+            font-weight: 900; /* Bolder for more impact */
+            font-size: clamp(2.8rem, 12vw, 5rem);
+            
+            /* Golden gradient text */
+            color: #f39c12; /* Fallback color */
+            background: linear-gradient(180deg, #fde047 0%, #f39c12 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            
+            /* Sharp 3D shadow with an outline effect */
+            text-shadow: 
+                /* Outline effect */
+                -1px -1px 0 #593a24,  
+                 1px -1px 0 #593a24,
+                -1px  1px 0 #593a24,
+                 1px  1px 0 #593a24,
+                 /* Main drop shadow */
+                 4px 4px 6px rgba(0,0,0,0.5);
+
+            letter-spacing: 0.05em;
             display: inline-block;
+            line-height: 1; /* Ensure tight line height */
         }
         
         .app-title-main .char {
@@ -154,15 +171,15 @@
         
         .app-title-sub {
             font-family: 'Inter', sans-serif;
-            font-weight: 500;
-            font-size: clamp(1rem, 5vw, 1.5rem);
-            color: var(--yellow-accent);
+            font-weight: 600;
+            font-size: clamp(1rem, 4.5vw, 1.4rem);
+            color: #ffffff;
             text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-top: -0.5rem;
+            letter-spacing: 0.25em;
+            margin-top: -0.25rem;
             opacity: 0;
             animation: fade-in-sub 1s ease-out 0.8s forwards;
-            text-shadow: 0 0 5px rgba(241, 196, 15, 0.7);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.75); /* Cleaner, darker shadow for readability */
         }
 
         .page-title {
