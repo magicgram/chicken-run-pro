@@ -140,28 +140,33 @@
             font-weight: 900;
             font-size: clamp(2.8rem, 12vw, 5rem);
             
-            /* More vibrant, metallic golden gradient */
-            color: #facc15; /* Fallback color */
-            background: linear-gradient(180deg, #fef08a 0%, #fde047 30%, #facc15 60%, #eab308 100%);
+            /* New, high-contrast metallic gradient */
+            color: #facc15; 
+            background: linear-gradient(180deg, #fff8c5 0%, #fde047 30%, #facc15 60%, #eab308 85%, #a16207 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             
-            /* Enhanced 3D effect with multiple layers */
+            /* Ultimate 3D game logo effect */
             text-shadow: 
+                /* Top Bevel Highlight */
+                0px -1px 1px rgba(255, 255, 230, 0.6),
+                
                 /* Sharp dark brown outline */
-                -1.5px -1.5px 0 #42200a,  
-                 1.5px -1.5px 0 #42200a,
-                -1.5px  1.5px 0 #42200a,
-                 1.5px  1.5px 0 #42200a,
-                /* Hard 3D extrusion effect */
-                 3px 5px 0 #271302,
-                /* Softer, larger drop shadow for depth */
-                 5px 7px 10px rgba(0,0,0,0.6);
+                -2px -2px 0 #42200a,  
+                 2px -2px 0 #42200a,
+                -2px  2px 0 #42200a,
+                 2px  2px 0 #42200a,
+                 
+                /* Chunky 3D extrusion */
+                 4px 6px 0 #271302,
+                 
+                /* Deep, soft drop shadow for max depth */
+                 6px 9px 15px rgba(0,0,0,0.7);
 
             letter-spacing: 0.05em;
             display: inline-block;
-            line-height: 0.9; /* Tighter line height for compact look */
+            line-height: 0.9;
         }
         
         .app-title-main .char {
@@ -173,15 +178,15 @@
         
         .app-title-sub {
             font-family: 'Inter', sans-serif;
-            font-weight: 700; /* A bit bolder */
+            font-weight: 700;
             font-size: clamp(1rem, 4.5vw, 1.4rem);
-            color: #E5E7EB; /* Softer white (light grey) */
+            color: #ffffff; /* Crisp White */
             text-transform: uppercase;
-            letter-spacing: 0.3em; /* Wider spacing */
-            margin-top: 0.25rem; /* Positive margin for better spacing */
+            letter-spacing: 0.3em;
+            margin-top: 0.5rem; /* Increased spacing */
             opacity: 0;
             animation: fade-in-sub 1s ease-out 0.8s forwards;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.8); /* Stronger, single drop shadow */
+            text-shadow: 2px 3px 4px #271302; /* Simpler but effective dark shadow */
         }
 
         .page-title {
