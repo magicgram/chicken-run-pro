@@ -62,6 +62,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, error, isLoading, infoMe
 
     return (
         <div className="flex flex-col items-center justify-center">
+            <h1 className="text-5xl app-title mb-8 text-center">
+                Chicken Run Predictor
+            </h1>
             <div className="w-full max-w-md p-8 space-y-6 content-card">
                 <div className="text-center">
                     <h1 className="text-4xl page-title mb-2">{t('login.title')}</h1>
